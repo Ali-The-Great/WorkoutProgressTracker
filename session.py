@@ -1,5 +1,5 @@
 from typing import List, Union
-from sets import Set
+from sets import Set, compute_score
 from superset import Superset
 from giantset import GiantSet
 from datetime import date
@@ -35,15 +35,17 @@ class Session:
 
     def total_set_score_by_name(self):
         li = self.get_all_sets()
+        exercise_dict = {}
+    
         for s in li:
-            print(s.exercise.name," , ",s.reps)
-
+            exercise_name = s.exercise.name
+        
+            if exercise_name in exercise_dict:
+                exercise_dict[exercise_name] += compute_score(s)
+            else:
+                exercise_dict[exercise_name] = compute_score(s)
+            
+        return exercise_dict
 
 se = Session(l,date.today())
-#li = se.get_all_sets()
-
-#for s in li:
-#    print(s)
-
-se.total_set_score_by_name()
-
+print(se.total_set_score_by_name())
